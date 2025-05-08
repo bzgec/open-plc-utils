@@ -355,6 +355,11 @@ static void MatchedState (struct session * session, struct channel * channel, st
 		session->state = PEV_STATE_DISCONNECTED;
 		return;
 	}
+	if (_allset( session->flags, SLAC_EXIT_AFTER_KEY))
+	{
+		session->state = PEV_STATE_NONE;
+		return;
+	}
 	sleep (session->settletime);
 
 #endif
@@ -400,7 +405,7 @@ int main (int argc, char const * argv [])
 	extern struct channel channel;
 	static char const * optv [] =
 	{
-		"cCdi:Klp:qs:t:vx",
+		"cCdi:KSlp:qs:t:vx",
 		"",
 		"Qualcomm Atheros Plug-in Electric Vehicle Emulator",
 		"c\tprint template configuration file on stdout",
@@ -418,6 +423,7 @@ int main (int argc, char const * argv [])
 #endif
 
 		"K\tstop after sounding finished",
+		"S\tstop after sounding finished and setting EVSE's NMK",
 		"l\tloop indefinitely",
 		"p s\tconfiguration profile is (s) [" LITERAL (PROFILE) "]",
 		"q\tsuppress normal output",
@@ -483,6 +489,9 @@ int main (int argc, char const * argv [])
 		case 'K':
 			_setbits (session.flags, SLAC_SOUNDONLY);
 			break;
+		case 'S':
+			_setbits (session.flags, SLAC_EXIT_AFTER_KEY);
+			break;
 		case 'l':
 			state = PEV_STATE_DISCONNECTED;
 			break;
@@ -518,7 +527,7 @@ int main (int argc, char const * argv [])
 	openchannel (& channel);
 	identifier (& session, & channel);
 	initialize (& session, profile, section);
-	if (_allclr (session.flags, SLAC_SOUNDONLY))
+	if (_allclr (session.flags, SLAC_SOUNDONLY | SLAC_EXIT_AFTER_KEY))
 	{
 		if (pev_cm_set_key (& session, & channel, & message))
 		{
