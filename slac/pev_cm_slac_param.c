@@ -108,7 +108,7 @@ signed pev_cm_slac_param (struct session * session, struct channel * channel, st
 	{
 		return (slac_debug (session, 1, __func__, CHANNEL_CANTSEND));
 	}
-	while (readmessage (channel, message, HOMEPLUG_MMV, (CM_SLAC_PARAM | MMTYPE_CNF)) > 0)
+	while (readmessageCheckDestMac (channel, message, HOMEPLUG_MMV, (CM_SLAC_PARAM | MMTYPE_CNF)) > 0)
 	{
 		if (! memcmp (session->RunID, confirm->RunID, sizeof (session->RunID)))
 		{
