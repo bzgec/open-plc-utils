@@ -310,6 +310,7 @@ static void UnmatchedState (struct session * session, struct channel * channel, 
 	if (slac_connect (session))
 	{
 		session->state = PEV_STATE_DISCONNECTED;
+		usleep (500*1000);
 		return;
 	}
 	if (_allset( session->flags, SLAC_SOUNDONLY))
