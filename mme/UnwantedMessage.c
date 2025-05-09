@@ -237,5 +237,29 @@ signed UnwantedMessage (void const * memory, size_t extent, uint8_t MMV, uint16_
 }
 
 
+signed UnwantedMessageCheckDestMac (void const * memory, size_t extent, uint8_t MMV, const uint8_t host [], uint16_t MMTYPE)
+
+{
+	if(UnwantedMessage(memory, extent, MMV, MMTYPE) != 0)
+	{
+		return (-1);
+	}
+
+	struct homeplug * homeplug = (struct homeplug *)(memory);
+	if (memcmp(host, homeplug->ethernet.ODA, ETHER_ADDR_LEN) != 0)
+	{
+
+#if defined (__WHYNOT__)
+
+		error (0, 0, "Wrong Ethernet Frame ODA");
+
+#endif
+
+		return (-1);
+	}
+	return(0);
+}
+
+
 #endif
 

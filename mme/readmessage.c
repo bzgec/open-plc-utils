@@ -104,6 +104,44 @@ ssize_t readmessage (struct channel const * channel, struct message * message, u
 	return (- 1);
 }
 
+ssize_t readmessageCheckDestMac (struct channel const * channel, struct message * message, uint8_t MMV, uint16_t MMTYPE)
+
+{
+	struct timeval ts;
+	struct timeval tc;
+	ssize_t length;
+	if (gettimeofday (& ts, NULL) == - 1)
+	{
+		error (1, errno, CANT_START_TIMER);
+	}
+    printf("channel timeout = %u\n", channel->timeout);
+	while ((length = readpacket (channel, message, sizeof (* message))) >= 0)
+	{
+        printf("readpacket\n");
+		if (! UnwantedMessageCheckDestMac (message, length, MMV, channel->host, MMTYPE))
+		{
+            printf("return length = %u\n", length);
+			return (length);
+		}
+		if (gettimeofday (& tc, NULL) == - 1)
+		{
+			error (1, errno, CANT_RESET_TIMER);
+		}
+		if (channel->timeout < 0)
+		{
+			continue;
+		}
+		if (channel->timeout > MILLISECONDS (ts, tc))
+		{
+			continue;
+		}
+        printf("return 0\n");
+		return (0);
+	}
+        printf("return -1\n");
+	return (- 1);
+}
+
 #endif
 
 
