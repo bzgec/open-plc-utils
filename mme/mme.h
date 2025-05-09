@@ -218,6 +218,7 @@ signed QualcommHeader1 (struct qualcomm_fmi *, uint8_t MMV, uint16_t MMTYPE);
  *--------------------------------------------------------------------*/
 
 signed UnwantedMessage (void const * memory, size_t extent, uint8_t MMV, uint16_t MMTYPE);
+signed UnwantedMessageCheckDestMac (void const * memory, size_t extent, uint8_t MMV, const uint8_t host [], uint16_t MMTYPE);
 signed FirmwareMessage (void const * memory);
 
 /*====================================================================*
@@ -226,6 +227,7 @@ signed FirmwareMessage (void const * memory);
 
 ssize_t sendmessage (struct channel const *, struct message *, ssize_t length);
 ssize_t readmessage (struct channel const *, struct message *, uint8_t MMV, uint16_t MMTYPE);
+ssize_t readmessageCheckDestMac (struct channel const * channel, struct message * message, uint8_t MMV, uint16_t MMTYPE);
 
 /*====================================================================*
  *

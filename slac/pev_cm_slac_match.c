@@ -83,7 +83,7 @@ signed pev_cm_slac_match (struct session * session, struct channel * channel, st
 	{
 		return (slac_debug (session, 1, __func__, CHANNEL_CANTSEND));
 	}
-	if (readmessage (channel, message, HOMEPLUG_MMV, (CM_SLAC_MATCH | MMTYPE_CNF)) > 0)
+	if (readmessageCheckDestMac (channel, message, HOMEPLUG_MMV, (CM_SLAC_MATCH | MMTYPE_CNF)) > 0)
 	{
 		if (! memcmp (session->RunID, confirm->MatchVarField.RunID, sizeof (session->RunID)))
 		{

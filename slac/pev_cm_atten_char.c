@@ -67,7 +67,7 @@ signed pev_cm_atten_char (struct session * session, struct channel * channel, st
 {
 	struct cm_atten_char_indicate * indicate = (struct cm_atten_char_indicate *) (message);
 	struct cm_atten_char_response * response = (struct cm_atten_char_response *) (message);
-	while (readmessage (channel, message, HOMEPLUG_MMV, (CM_ATTEN_CHAR | MMTYPE_IND)) > 0)
+	while (readmessageCheckDestMac (channel, message, HOMEPLUG_MMV, (CM_ATTEN_CHAR | MMTYPE_IND)) > 0)
 	{
 		if (! memcmp (session->RunID, indicate->ACVarField.RunID, sizeof (session->RunID)))
 		{
